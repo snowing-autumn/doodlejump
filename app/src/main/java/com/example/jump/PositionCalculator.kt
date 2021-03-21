@@ -51,13 +51,13 @@ class PositionCalculator(private var mContext: Context, private val handler: Han
         Thread {
 
             try {
-                sleep(1)
+                sleep(10)
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
             var i=0
-            while (i < 32) {
-                mHeight+=interval/32
+            while (i < 64) {
+                mHeight+=interval/64
                 i++
                 Step.notifyALL()
             }
@@ -90,8 +90,8 @@ class PositionCalculator(private var mContext: Context, private val handler: Han
             val info=if(isDropping)"下降"
             else
                 "上升"
-            Log.e("状态",info)
-            Log.e("高度",""+mHeight)
+            //Log.e("状态",info)
+            //Log.e("高度",""+mHeight)
 
             //下降阶段
             if(isDropping){
@@ -113,12 +113,14 @@ class PositionCalculator(private var mContext: Context, private val handler: Han
                 //Log.e("剩余高度",""+heightRemain)
                 if(heightRemain>0){
                     if(mHeight<800&&!isDropping&&!isStepChanging) {
+                        Log.e("开始刷新", "$isDropping  $isStepChanging")
                         isDoodleChanging=true
                         isStepChanging=true
-                        Step.flashSteps(mContext, mContext.resources.displayMetrics.heightPixels.toDouble() - mHeight + 500)
-                        flashDoodle(mContext.resources.displayMetrics.heightPixels.toDouble() - mHeight + 500)
+                        Step.flashSteps(mContext, mContext.resources.displayMetrics.heightPixels.toDouble() - mHeight -400)
+                        flashDoodle(mContext.resources.displayMetrics.heightPixels.toDouble() - mHeight -400)
+                        sleep(10*64)
                     }
-                        heightRemain -= sqrt(heightRemain)*duration/32
+                    heightRemain -= sqrt(heightRemain)*duration/32
                     if(heightRemain<0) heightRemain=0.0
                     mHeight -= sqrt(heightRemain) * duration/32
                     mPositionChangeListener.verticalPosition(mHeight)

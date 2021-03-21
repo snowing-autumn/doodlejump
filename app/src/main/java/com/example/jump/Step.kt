@@ -38,21 +38,20 @@ class Step {
         }
         //跳跃上temp级台阶后更新梯子
         fun flashSteps(context:Context,interval:Double){
-            val maxHeight=context.resources.displayMetrics.heightPixels
-            Log.e("梯子数量0",""+ stepDatas.size)
+            val maxHeight=context.resources.displayMetrics.heightPixels.toDouble()
             //向下平移梯子的动画
             Thread {
 
+                Log.e("进入子线程","进入子线程")
                 var i=0
-                while (i < 32) {
+                while (i < 64) {
                     try {
-                        Thread.sleep(1)
+                        Thread.sleep(10)
                     } catch (e: InterruptedException) {
                         e.printStackTrace()
                     }
-                    var j=0
-                    while(j<50)
-                        stepDatas[j].posY+=interval/32
+                    for(step in stepDatas)
+                        step.posY+=interval/64
                     i++
                     Log.e("梯子数量",""+ stepDatas.size)
                     notifyALL()
