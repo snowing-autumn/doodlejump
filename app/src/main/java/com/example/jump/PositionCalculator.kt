@@ -50,16 +50,16 @@ class PositionCalculator(private var mContext: Context, private val handler: Han
     fun flashDoodle(interval:Double){
         Thread {
 
-            try {
-                sleep(10)
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-            }
             var i=0
             while (i < 64) {
+                try {
+                    sleep(10)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
                 mHeight+=interval/64
                 i++
-                Step.notifyALL()
+                mPositionChangeListener.verticalPosition(mHeight)
             }
             isDoodleChanging=false
         }.start()

@@ -13,7 +13,8 @@ class GameView @JvmOverloads constructor(context: Context?, attrs: AttributeSet?
     private var isPause=false
 
 
-
+    //分数
+    private var score=0
     //左右倾斜
     private var isLeft=false
     //人物坐标
@@ -105,7 +106,10 @@ class GameView @JvmOverloads constructor(context: Context?, attrs: AttributeSet?
         else
             canvas?.drawBitmap(right,(positionX-50).toFloat(),(positionY- 140).toFloat(),stepPaint)
         if(positionCalculator.isDropping)
-            Step.isOnStep(positionX,positionY)
+            if(Step.isOnStep(positionX,positionY)) {
+                score += 1
+                (context as onScoreChanged).scoreChange(score)
+            }
     }
 
     private fun showStep(canvas: Canvas?){
