@@ -27,7 +27,9 @@ class MultiActivity : AppCompatActivity() {
 
         singleButton.setOnClickListener {
             val intent=Intent(this,MainActivity::class.java)
-            startActivity(intent) }
+            intent.putExtra("username",name)
+            startActivity(intent)
+        }
         historyButton.setOnClickListener {
             val intent=Intent(this,History::class.java)
             startActivity(intent)

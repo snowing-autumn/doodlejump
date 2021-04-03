@@ -90,16 +90,15 @@ class PositionCalculator(private var mContext: Context, private val handler: Han
             val info=if(isDropping)"下降"
             else
                 "上升"
-            //Log.e("状态",info)
-            //Log.e("高度",""+mHeight)
+
 
             //下降阶段
             if(isDropping){
                 //摔死了
                 if (mHeight >= mContext.resources.displayMetrics.heightPixels.toDouble()) {
-                    handler.post { Toast.makeText(mContext, "你凉了", Toast.LENGTH_SHORT).show() }
                     mPositionChangeListener.verticalPosition(mContext.resources.displayMetrics.heightPixels.toDouble()-1000 )
                     heightRemain=1.0
+                    (mContext as MainActivity).gameOver()
                 }else { //正常跳跃
                     if(heightRemain<=0)
                         heightRemain=1.0
