@@ -3,4 +3,6 @@
     <string name="button">单人开始</string>
     <string name="button2">组队模式</string>
     <string name="button3">历史成绩</string>
+    <string name="input">请输入用户名</string>
+    <string name="confirm">确认</string>
 </resources>

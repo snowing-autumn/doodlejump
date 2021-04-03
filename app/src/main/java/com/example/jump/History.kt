@@ -8,6 +8,8 @@ class History : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history2)
 
+        val dbHelper=HistoryHelper(this,"history.db",1)
+        dbHelper.readableDatabase
 
     }
 }
