@@ -87,9 +87,9 @@ class PositionCalculator(private var mContext: Context, private val handler: Han
 
 
             mHeight=mPositionChangeListener.getPositionY()
-            val info=if(isDropping)"下降"
-            else
-                "上升"
+            //val info=if(isDropping)"下降"
+            //else
+            //   "上升"
 
 
             //下降阶段
@@ -98,11 +98,11 @@ class PositionCalculator(private var mContext: Context, private val handler: Han
                 if (mHeight >= mContext.resources.displayMetrics.heightPixels.toDouble()) {
                     mPositionChangeListener.verticalPosition(mContext.resources.displayMetrics.heightPixels.toDouble()-1000 )
                     heightRemain=1.0
-                    (mContext as MainActivity).gameOver()
+                    handler.sendEmptyMessage(1)
                 }else { //正常跳跃
                     if(heightRemain<=0)
                         heightRemain=1.0
-                    Log.e("剩余高度",""+heightRemain)
+                    //Log.e("剩余高度",""+heightRemain)
                     if(heightRemain<=400)
                         heightRemain += sqrt(heightRemain)*duration/32
                     mHeight += sqrt(heightRemain) * duration/32

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 
@@ -17,7 +18,11 @@ class MainActivity : AppCompatActivity() ,onScoreChanged{
 
     private lateinit var mGameView:GameView
     private lateinit var mScoreView:TextView
-    companion object handler: Handler()
+    val mHandler:Handler=Handler{
+        if(it.what==1)
+            gameOver()
+        false
+    }
 
     //历史成绩记录所需数据
     var score=0
@@ -39,12 +44,7 @@ class MainActivity : AppCompatActivity() ,onScoreChanged{
         db=HistoryHelper(this,"history.db",1).writableDatabase
         name = intent.getStringExtra("username")!!
 
-        scoreAlert=AlertDialog.Builder(this).apply {
-            title = "游戏结束"
-            setMessage("你的分数是$score")
-            setCancelable(false)
-            setPositiveButton("确认"){ _, _ -> gameOver() }
-        }
+
 
         mGameView.start()
 
@@ -58,19 +58,33 @@ class MainActivity : AppCompatActivity() ,onScoreChanged{
 
 
     fun gameOver(){
+
         val value=ContentValues().apply {
             put("name",name)
             put("score",score)
             put("mode",mode)
         }
         val value2=ContentValues().apply { put("score",score) }
-        if(db.query("History",arrayOf("name"),null,null,null,null,null)==null)
-            db.insert("History",null,value)
-        else
-            db.update("History", value2, "name = ?", arrayOf(name))
+        val cursor=db.query("History",arrayOf("name","score"),"name = ?", arrayOf(name),null,null,null)
+        if(cursor.count==0) {
+            db.insert("History", null, value)
+            Log.e("SQL","Write Done!!")
+        }
+        else {
+            cursor.moveToFirst()
+            if(cursor.getInt(cursor.getColumnIndex("score"))<=score)
+                db.update("History", value2, "name = ?", arrayOf(name))
+        }
+
+        cursor.close()
         mGameView.stop()
+        scoreAlert=AlertDialog.Builder(this).apply {
+            title = "游戏结束"
+            setMessage("你的分数是$score")
+            setCancelable(false)
+            setPositiveButton("确认"){ _, _ -> finish() }
+        }
         scoreAlert.show()
-        finish()
     }
 
     override fun onStop() {

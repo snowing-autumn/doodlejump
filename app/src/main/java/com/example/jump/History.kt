@@ -3,6 +3,7 @@ package com.example.jump
 import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,7 +29,7 @@ class History : AppCompatActivity() {
         confirmButton.setOnClickListener { finish() }
         deleteButton.setOnClickListener {
             db.delete("History",null,null)
-            recyclerView.invalidate()
+            finish()
         }
     }
 
@@ -41,6 +42,7 @@ class History : AppCompatActivity() {
                 val name = cursor.getString(cursor.getColumnIndex("name"))
                 val score = cursor.getInt(cursor.getColumnIndex("score"))
                 val mode = cursor.getInt(cursor.getColumnIndex("mode"))
+                Log.e("Data","$name   $score  $mode")
                 historyDataList.add(HistoryData(name, score, mode))
             }while (cursor.moveToNext())
         cursor.close()

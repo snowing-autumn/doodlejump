@@ -28,13 +28,13 @@ class GameView @JvmOverloads constructor(context: Context?, attrs: AttributeSet?
     private var doodlePaint=Paint()
     private var stepPaint=Paint()
     //梯子数据
-    private var steps= Step.Steps.stepDatas
+    private var steps= Step.stepDatas
     //梯子高度间隔
     private var interval=300.0
 
-    private val handler=MainActivity.handler
+    private val mHandler=(context as MainActivity).mHandler
     private val accelerate=Accelerate(this,context!!)
-    private val positionCalculator = PositionCalculator(context!!, handler)
+    private val positionCalculator = PositionCalculator(context!!, mHandler)
 
 
     init {
@@ -65,7 +65,7 @@ class GameView @JvmOverloads constructor(context: Context?, attrs: AttributeSet?
 
     override fun verticalPosition(positionY: Double) {
         this.positionY=positionY
-        handler.post{invalidate()}
+        mHandler.post{invalidate()}
     }
 
     override fun getPositionY(): Double {
@@ -79,13 +79,13 @@ class GameView @JvmOverloads constructor(context: Context?, attrs: AttributeSet?
         if(positionX<0) positionX=context.resources.displayMetrics.widthPixels.toDouble()
         if(positionX>context.resources.displayMetrics.widthPixels)
             positionX=0.0
-        handler.post{invalidate()}
+        mHandler.post{invalidate()}
 
     }
 
     override fun notifyDataChanges() {
         steps=Step.getInstance(context,interval)
-        handler.post{invalidate()}
+        mHandler.post{invalidate()}
     }
 
     override fun onDraw(canvas: Canvas?) {
